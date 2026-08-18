@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f8fc">
+  <title>Docker Escape — Sauvez l'application</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="ambient ambient-a"></div>
+  <div class="ambient ambient-b"></div>
+
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="Docker Escape, accueil">
+      <span class="brand-mark">🐳</span>
+      <span><strong>Docker Escape</strong><small>Sauvez l'application</small></span>
+    </a>
+    <div id="hud" class="hud hidden" aria-live="polite">
+      <div class="hud-item"><span>Équipe</span><strong id="hud-team">—</strong></div>
+      <div class="hud-item"><span>Temps</span><strong id="hud-time">30:00</strong></div>
+      <div class="hud-item"><span>Indices</span><strong id="hud-hints">🔦🔦🔦</strong></div>
+      <div class="hud-item"><span>Score</span><strong id="hud-score">0/100</strong></div>
+    </div>
+  </header>
+
+  <main class="shell">
+    <section id="screen-start" class="screen start-screen">
+      <div class="hero-copy">
+        <div class="eyebrow">ESCAPE GAME PÉDAGOGIQUE • 30 MIN</div>
+        <h1>Le déploiement est <span>bloqué.</span><br>Votre équipe peut-elle sauver Docker&nbsp;?</h1>
+        <p>Une application PHP + MySQL doit être présentée au client. L'environnement Docker a été saboté. Résolvez 5 missions, gagnez 5 mots-indices et trouvez le mot secret final.</p>
+        <div class="feature-row">
+          <div><b>5</b><span>missions</span></div>
+          <div><b>3</b><span>indices UV</span></div>
+          <div><b>1</b><span>mot secret</span></div>
+        </div>
+      </div>
+
+      <form id="start-form" class="start-card">
+        <div class="status-light"><i></i> INCIDENT CRITIQUE</div>
+        <label for="team-name">Nom de votre équipe</label>
+        <input id="team-name" name="teamName" maxlength="28" placeholder="Ex. Les Baleines Bleues" autocomplete="off" required>
+        <button class="primary-btn" type="submit">Démarrer la mission <span>→</span></button>
+        <button id="resume-btn" class="ghost-btn hidden" type="button">Reprendre la partie sauvegardée</button>
+        <p class="microcopy">La progression est sauvegardée uniquement dans ce navigateur.</p>
+      </form>
+    </section>
+
+    <section id="screen-game" class="screen game-screen hidden" aria-live="polite">
+      <div class="progress-wrap">
+        <div class="progress-meta"><span id="mission-label">Mission 1 / 5</span><span id="progress-percent">20%</span></div>
+        <div class="progress-track"><div id="progress-bar" class="progress-bar"></div></div>
+      </div>
+
+      <div class="game-grid">
+        <aside class="briefing-panel">
+          <div class="panel-kicker">DOSSIER D'INCIDENT</div>
+          <div id="mission-icon" class="mission-icon">🧩</div>
+          <h2 id="mission-title">La chaîne Docker</h2>
+          <p id="mission-story"></p>
+
+          <div class="objective-card">
+            <span>OBJECTIF</span>
+            <p id="mission-objective"></p>
+          </div>
+
+          <button id="hint-btn" class="hint-btn" type="button">
+            <span class="flashlight">🔦</span>
+            Utiliser la lampe UV
+            <small>coûte 1 jeton</small>
+          </button>
+
+          <div class="words-box">
+            <span>MOTS RÉCUPÉRÉS</span>
+            <div id="words-list" class="words-list"><i>?</i><i>?</i><i>?</i><i>?</i><i>?</i></div>
+          </div>
+        </aside>
+
+        <section class="mission-panel">
+          <div id="mission-content"></div>
+          <div id="feedback" class="feedback" role="status"></div>
+        </section>
+      </div>
+    </section>
+
+    <section id="screen-final" class="screen final-screen hidden">
+      <div class="final-card">
+        <div class="success-ring">✓</div>
+        <div class="eyebrow">MISSION ACCOMPLIE</div>
+        <h1>Application réparée.<br><span>Déploiement réussi.</span></h1>
+        <p id="final-team"></p>
+        <div class="final-stats">
+          <div><span>Temps</span><strong id="final-time">—</strong></div>
+          <div><span>Indices utilisés</span><strong id="final-hints">—</strong></div>
+          <div><span>Erreurs</span><strong id="final-errors">—</strong></div>
+          <div><span>Score</span><strong id="final-score">—</strong></div>
+        </div>
+        <div class="score-result"><span>Niveau</span><strong id="final-level">—</strong><p id="final-distance">—</p></div>
+        <div class="final-word">Mot secret : <strong>CONTENEUR</strong></div>
+        <button id="restart-btn" class="primary-btn" type="button">Nouvelle partie</button>
+      </div>
+    </section>
+
+    <section id="screen-timeout" class="screen final-screen hidden">
+      <div class="final-card timeout-card">
+        <div class="success-ring danger">!</div>
+        <div class="eyebrow danger-text">TEMPS ÉCOULÉ</div>
+        <h1>Le client attend toujours…</h1>
+        <p>Vous pouvez continuer en mode entraînement pour terminer les missions, mais le chrono officiel est terminé.</p>
+        <button id="continue-btn" class="primary-btn" type="button">Continuer en entraînement</button>
+        <button id="timeout-restart-btn" class="ghost-btn" type="button">Recommencer</button>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="hint-dialog" class="hint-dialog">
+    <div class="uv-overlay">
+      <div class="uv-beam"></div>
+      <div class="uv-content">
+        <span>🔦 INDICE UV</span>
+        <p id="hint-text"></p>
+        <button id="close-hint" class="primary-btn" type="button">J'ai compris</button>
+      </div>
+    </div>
+  </dialog>
+
+
+  <dialog id="answer-dialog" class="answer-dialog">
+    <div class="answer-card">
+      <div id="answer-dialog-icon" class="answer-dialog-icon">✓</div>
+      <h2 id="answer-dialog-title">Bonne réponse</h2>
+      <p id="answer-dialog-text"></p>
+      <div id="answer-dialog-score" class="answer-dialog-score">Analyse validée</div>
+      <button id="answer-dialog-close" class="primary-btn" type="button">Continuer</button>
+    </div>
+  </dialog>
+
+  <dialog id="word-dialog" class="word-dialog">
+    <div class="word-reveal">
+      <span>MISSION VALIDÉE</span>
+      <p>Vous récupérez le mot-indice :</p>
+      <strong id="revealed-word">IMAGE</strong>
+      <button id="next-mission-btn" class="primary-btn" type="button">Mission suivante →</button>
+    </div>
+  </dialog>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
